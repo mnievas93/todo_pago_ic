@@ -2,7 +2,7 @@
 	"TodoPago": {
 		"version": "1.1",
 		"dependencies": {
-			"ESB-DataService": {
+			"ESBDataService": {
 				"version_tag": "develop"
 			},
 			"Notificaciones": {
