@@ -1,0 +1,9 @@
+#
+#	Ansible inventory file for: vagrant
+#
+
+[YumRepoRpmForge_servers]
+AzulinhoYumRepoRpmForge group=YumRepoRpmForge_servers deploy_env=vagrant
+
+[vagrant:children]
+YumRepoRpmForge_servers

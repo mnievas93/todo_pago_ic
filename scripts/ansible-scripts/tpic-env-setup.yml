@@ -1,0 +1,65 @@
+---
+- name: Build Environment SetUp
+  hosts: all
+  vars:
+    download_dir: /home/vagrant/tpic-download
+    installed_apps_dir: /home/vagrant/tpic-apps
+    usr_home_dir: /home/vagrant
+    ruby_exe_path: /opt/rh/ruby193/root/usr/bin
+    ruby_libs_path: /opt/rh/ruby193/root/usr/lib64
+  tasks:
+  - name: Oracle JDK downloaded
+    command: curl -LO -H "Cookie: oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/7u67-b01/jdk-7u67-linux-x64.rpm" chdir={{ download_dir }} creates={{ download_dir }}/jdk-7u67-linux-x64.rpm
+    register: oracle_jdk_download
+  - name: Oracle JDK installed
+    apt_rpm: pkg=jdk-7u67-linux-x64
+  - name: Git installed
+    yum: name=git state=latest
+    sudo: True
+  - name: Maven downloaded
+    command: wget http://apache.dattatec.com/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz chdir={{ download_dir }} creates={{ download_dir }}/apache-maven-3.3.9-bin.tar.gz
+    register: mvn_download
+  - name: Maven untared
+    unarchive: src={{ download_dir }}/apache-maven-3.3.9-bin.tar.gz dest={{ installed_apps_dir }} copy=no
+    when: mvn_download.changed
+  - name: M2_HOME environment variable added
+    command: echo "export M2_HOME=/usr/local/maven" >> .bash_profile chdir={{ usr_home_dir }}
+    when: mvn_download.changed
+  - name: Mvn added to usr path
+    command: echo "export PATH=\${M2_HOME}/bin:\${PATH}" >> .bash_profile chdir={{ usr_home_dir }}
+    when: mvn_download.changed
+  - name: NSS package installed
+    yum: name=nss
+    sudo: True
+  - name: NodeJS downloaded
+    command: wget https://nodejs.org/download/release/v0.12.0/node-v0.12.0-linux-x64.tar.gz chdir={{ download_dir }} creates={{ download_dir }}/node-v0.12.0-linux-x64.tar.gz
+    register: node_download
+  - name: NodeJS untared
+    unarchive: src={{ download_dir }}/node-v0.12.0-linux-x64.tar.gz dest={{ installed_apps_dir }} copy=no
+    when: node_download.changed
+  - name: Node added to usr path
+    command: echo "export PATH=\$PATH:{{ download_dir }}/node-v0.12.0-linux-x64/bin" >> .bash_profile chdir={{ usr_home_dir }}
+    when: node_download.changed
+  - name: CentOS Software Collection installed
+    yum: name=centos-release-SCL
+    sudo: True
+  - name: Ruby installed
+    yum: name=ruby193
+    sudo: True
+    register: ruby_installed
+  - name: Sass gem installed
+    gem: name=sass
+    environment:
+      PATH: "{{ ansible_env.PATH }}:{{ ruby_exe_path }}"
+      LD_LIBRARY_PATH: {{ ruby_libs_path }}
+  - name: Ruby Developer tools installed
+    yum: name=ruby193-ruby-devel.x86_64
+    sudo: True
+  - name: GCC installed
+    yum: name=gcc
+    sudo: True
+  - name: Compass gem installed
+    gem: name=compass
+    environment:
+      PATH: "{{ ansible_env.PATH }}:{{ ruby_exe_path }}"
+      LD_LIBRARY_PATH: {{ ruby_libs_path }}

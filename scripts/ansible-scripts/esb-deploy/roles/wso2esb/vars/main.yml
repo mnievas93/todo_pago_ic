@@ -1,0 +1,6 @@
+#Deploy subpath for root tenant (common to all wso2 components)
+root_tenant_deploy_path: "repository/deployment/server/synapse-configs/default"
+
+root_tenant_context_suffix: ""
+tenant1_1_context_suffix: "/t/1.1"
+tenant1_2_context_suffix: "/t/1.2"

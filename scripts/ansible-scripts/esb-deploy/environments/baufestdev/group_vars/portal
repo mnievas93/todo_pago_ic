@@ -1,0 +1,4 @@
+jboss_base_path: "/opt/todopago/jboss"
+jboss_port_offset: 1
+jboss_user: jenkins
+jboss_java_home: "/opt/java"

@@ -1,0 +1,16 @@
+  - debug: msg="play_hosts={{play_hosts}}"
+
+  - debug: msg="groups={{groups}}"
+
+  - debug: msg="group names={{group_names}}"
+
+  - name: Include alternative tenant deploy option
+    include_vars: vars/{{ tenant }}.yml
+    when: (( tenant is defined ) and (tenant != 'root_tenant') and (tenant != 'roottenant'))
+
+  - name: Dataservices
+    synchronize: >
+          src="{{ src_repo_path }}//{{ src_repo_wso2_dir }}/"
+          dest="{{ wso2_base_path }}/{{ deploy_path }}/dataservices"
+          perms=no
+          rsync_opts="--verbose"

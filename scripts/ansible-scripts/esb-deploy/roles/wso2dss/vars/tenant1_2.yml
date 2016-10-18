@@ -1,0 +1,2 @@
+
+deploy_path: "{{ tenant1_2_deploy_path }}"

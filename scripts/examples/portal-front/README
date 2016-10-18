@@ -1,0 +1,6 @@
+PRECONDICIONES
+
+En windows, instalar el vagrant-guest_ansible:
+
+	vagrant plugin install vagrant-guest_ansible
+

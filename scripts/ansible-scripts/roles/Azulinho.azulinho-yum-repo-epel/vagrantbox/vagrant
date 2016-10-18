@@ -1,0 +1,9 @@
+#
+#	Ansible inventory file for: vagrant
+#
+
+[YumRepoEpel_servers]
+AzulinhoYumRepoEpel group=YumRepoEpel_servers deploy_env=vagrant
+
+[vagrant:children]
+YumRepoEpel_servers

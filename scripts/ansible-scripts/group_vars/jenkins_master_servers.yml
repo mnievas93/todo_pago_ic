@@ -1,0 +1,81 @@
+# Settings básicos
+jenkins_hostname: localhost
+jenkins_plugins:
+  - ruby-runtime
+  - antisamy-markup-formatter
+  - github-api
+  - ansicolor
+  - external-monitor-job
+  - build-with-parameters
+  - pam-auth
+  - delivery-pipeline-plugin
+  - mailer
+  - junit
+  - locks-and-latches
+  - github
+  - ldap
+  - jquery
+  - windows-slaves
+  - timestamper
+  - mapdb-api
+  - config-autorefresh-plugin
+  - publish-over-ssh
+  - scm-api
+  - multiple-scms
+  - buildgraph-view
+  - ssh-credentials
+  - log-parser
+  - show-build-parameters
+  - ci-game
+  - naginator
+  - jobConfigHistory
+  - javadoc
+  - throttle-concurrents
+  - build-flow-plugin
+  - copyartifact
+  - mask-passwords
+  - token-macro
+  - envinject
+  - analysis-core
+  - flexible-publish
+  - greenballs
+  - build-pipeline-plugin
+  - maven-plugin
+  - ssh-slaves
+  - matrix-project
+  - git
+  - git-client
+  - credentials
+  - gitlab-hook
+  - matrix-auth
+  - run-condition
+  - ssh-agent
+  - github-oauth
+  - rebuild
+  - configurationslicing
+  - parameterized-trigger
+  - build-timeout
+  - job-dsl
+  - subversion
+  - job-log-logger-plugin
+  - translation
+  - build-monitor-plugin
+  - sonar
+  - ansible
+
+# Usuarios
+jenkins_users:
+  - {
+    name: "Admin",
+    password: "Admin",
+    email: "no-reply@localhost"
+    }
+  - {
+    name: "user-ci",
+    password: "Pris1802",
+    email: "no-reply@localhost"
+    }
+
+jenkins_install_dir: /var/lib/jenkins
+jenkins_jar_location: /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar
+role_dir: "{{ lookup('pipe','pwd')|dirname }}"

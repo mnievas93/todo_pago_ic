@@ -1,0 +1,9 @@
+#
+#	Ansible inventory file for: vagrant
+#
+
+[Python27_servers]
+AzulinhoPython27 group=Python27_servers deploy_env=vagrant
+
+[vagrant:children]
+Python27_servers

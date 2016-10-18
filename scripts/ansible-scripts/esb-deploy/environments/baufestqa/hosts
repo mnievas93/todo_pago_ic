@@ -1,0 +1,40 @@
+[baufestqa-esbfront]
+192.168.11.87 ansible_sudo_pass='Pris1802'
+
+[baufestqa-esbback]
+192.168.11.87 ansible_sudo_pass='Pris1802'
+
+[baufestqa-dss]
+192.168.11.87 ansible_sudo_pass='Pris1802'
+
+[baufestdev-esbback]
+192.168.11.87 ansible_sudo_pass='Pris1802'
+
+[baufestdev-esbfront]
+192.168.11.87 ansible_sudo_pass='Pris1802'
+
+[baufestdev-dss]
+192.168.11.87 ansible_sudo_pass='Pris1802'
+
+
+[esbback:children]
+baufestdev-esbback
+baufestqa-esbback
+
+[esbfront:children]
+baufestdev-esbfront
+baufestqa-esbfront
+
+[dss:children]
+baufestdev-dss
+baufestqa-dss
+
+[baufestdev:children]
+baufestdev-esbback
+baufestdev-esbfront
+baufestdev-dss
+
+[baufestqa:children]
+baufestqa-esbback
+baufestqa-esbfront
+baufestqa-dss

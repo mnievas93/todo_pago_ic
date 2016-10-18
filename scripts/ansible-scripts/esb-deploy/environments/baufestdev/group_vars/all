@@ -1,0 +1,60 @@
+
+portal_host_ep: 192.168.11.87
+portal_port_ep: 8080
+
+notifications_host_ep: 192.168.11.87
+notifications_port_ep: 8080
+
+panel_host_ep: 192.168.11.87
+panel_port_ep: 8080
+
+
+esbfront_host_ep: 192.168.11.87
+esbfront_http_port_ep: 8290
+esbfront_https_port_ep: 8253
+
+esbback_host_ep: 192.168.11.87
+esbback_http_port_ep: 8390
+esbback_https_port_ep: 8353
+
+dss_host_ep: 192.168.11.87
+dss_http_port_ep: 9874
+
+
+db_host: bfdev353
+db_port: 1433
+db_usr_configurations: jenkins
+db_pass_configurations: "baufest"
+db_usr_transactions: jenkins
+db_pass_transactions: "baufest"
+
+couchbase_host: localhost
+couchbase_port: 8092
+
+bpservice_host_ep: 192.168.11.87
+bpservice_port_ep: 10443
+
+decidir_host_ep: 138.121.79.61
+decidir_port_ep: 8443
+
+sso_host_ep: 192.168.11.87
+sso_port_ep: 28960
+
+pushnotify_host_ep: 192.168.11.87
+pushnotify_port_ep: 18280
+
+serviciolink_host_ep: 111.111.111.111
+
+dataservice_host_ep: 192.168.11.87
+dataservice_port_ep: 8280
+
+obtenerfactura_host_ep: 192.168.11.87
+obtenerfactura_port_ep: 18080
+
+smtp_host: 192.168.28.45
+smtp_port: 25
+mail_user:
+mail_pass:
+
+jms_host: 192.168.11.25
+jms_port: 5446

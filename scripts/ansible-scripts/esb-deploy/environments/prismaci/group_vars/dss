@@ -1,0 +1,5 @@
+
+wso2_base_path: "/opt/prisma/wso2/dss"
+
+tenant1_1_deploy_path: "repository/tenants/1"
+tenant1_2_deploy_path: "repository/tenants/1"

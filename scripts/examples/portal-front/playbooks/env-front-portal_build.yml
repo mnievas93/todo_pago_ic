@@ -1,0 +1,81 @@
+---
+- name: Portal Front Build Environment
+  hosts: all
+  tasks:
+  - name: java-1.7.0-openjdk-devel installed
+    yum: name=java-1.7.0-openjdk-devel state=present
+    sudo: True
+  - name: Git installed
+    yum: name=git state=latest
+    sudo: True
+#  - name: Jenkins repo downloaded
+#    command: wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo creates=/etc/yum.repos.d/jenkins.repo
+  - name: Jenkins repo downloaded
+    get_url: url=http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo dest=/etc/yum.repos.d/jenkins.repo
+    sudo: True
+  - name: Repo key for jenkins added
+    rpm_key: key=https://jenkins-ci.org/redhat/jenkins-ci.org.key
+    sudo: True
+  - name: Jenkins installed
+    yum: name=jenkins state=present
+    sudo: True
+#  - name: Jenkins started
+#    command: java -jar /usr/lib/jenkins/jenkins.war --httpPort=80
+  - name: NodeJS downloaded and untar
+    command: wget https://nodejs.org/download/release/v0.12.0/node-v0.12.0-linux-x64.tar.gz chdir=/home/vagrant creates=/home/vagrant/node-v0.12.0-linux-x64.tar.gz
+    register: node_download
+  - name: NodeJS untared
+    unarchive: src=/home/vagrant/node-v0.12.0-linux-x64.tar.gz dest=/home/vagrant copy=no
+    when: node_download.changed
+  - name: Node added to usr path
+    command: echo "export PATH=\$PATH:/home/vagrant/node-v0.12.0-linux-x64/bin" >> .bash_profile chdir=/home/vagrant
+    when: node_download.changed
+#   - name: Add github.com public host key
+#    command: ssh-keyscan -H github.com >> /etc/ssh/ssh_known_hosts
+  - name: Portal Front checked out
+    git: repo="https://usr-ci-prisma:Pris1802@github.com/asaptech-visa/boton_portal_front.git" dest=/home/vagrant/repo/boton_portal_front version=develop
+#    git: repo="git@github.com:asaptech-visa/boton_portal_front.git" dest=/home/vagrant/repo/boton_portal_front version=merge_billetera accept_hostkey=yes
+  - name: CentOS Software Collection installed
+    yum: name=centos-release-SCL
+    sudo: True
+  - name: Ruby installed
+    yum: name=ruby193
+    sudo: True
+    register: ruby_installed
+#  - name: Ruby available for this user
+#    command: cat /opt/rh/ruby193/enable >> /home/vagrant/.bash_profile
+#    sudo: True
+#  - name: Ruby configuration enabled
+#    command: . /opt/rh/ruby193/enable
+#    sudo: False
+#    when: ruby_installed.changed
+  - name: Sass gem installed
+    gem: name=sass
+    environment:
+      PATH: "{{ ansible_env.PATH }}:/opt/rh/ruby193/root/usr/bin"
+      LD_LIBRARY_PATH: /opt/rh/ruby193/root/usr/lib64
+  - name: Grunt npm package installed
+    npm: name=grunt global=yes path=/home/vagrant/repo/boton_portal_front executable=/home/vagrant/node-v0.12.0-linux-x64/bin/npm
+  - name: Grunt Client npm package installed
+    npm: name=grunt-cli global=yes path=/home/vagrant/repo/boton_portal_front executable=/home/vagrant/node-v0.12.0-linux-x64/bin/npm
+  - name: Bower npm package installed
+    npm: name=bower global=yes path=/home/vagrant/repo/boton_portal_front executable=/home/vagrant/node-v0.12.0-linux-x64/bin/npm
+  - name: Npm packages in package.json installed
+    npm: path=/home/vagrant/repo/boton_portal_front executable=/home/vagrant/node-v0.12.0-linux-x64/bin/npm
+    tags:
+      - always
+    environment:
+        PATH: "{{ ansible_env.PATH }}:/home/vagrant/node-v0.12.0-linux-x64/bin"
+  - name: Bower Packages based on bower.json installed
+    bower: path=/home/vagrant/repo/boton_portal_front
+    environment:
+        PATH: "{{ ansible_env.PATH }}:/home/vagrant/node-v0.12.0-linux-x64/bin"
+  - name: Bower packages based on bower.json in their latest version
+    bower: path=/home/vagrant/repo/boton_portal_front state=latest
+    environment:
+        PATH: "{{ ansible_env.PATH }}:/home/vagrant/node-v0.12.0-linux-x64/bin"
+  - name: Grunt build
+    command: grunt build --force chdir=/home/vagrant/repo/boton_portal_front
+    environment:
+        PATH: "{{ ansible_env.PATH }}:/home/vagrant/node-v0.12.0-linux-x64/bin:/opt/rh/ruby193/root/usr/bin"
+        LD_LIBRARY_PATH: /opt/rh/ruby193/root/usr/lib64

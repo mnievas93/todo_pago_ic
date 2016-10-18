@@ -1,0 +1,6 @@
+vendor
+.vagrant
+vendor
+librarian_roles/
+vagrantbox/roles/Azulinho.azulinho-google-dns/
+vagrantbox/roles/Azulinho.azulinho-yum-repo-rpmforge/

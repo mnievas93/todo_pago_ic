@@ -1,0 +1,9 @@
+#
+#	Ansible inventory file for: vagrant
+#
+
+[JavaOpenJdkJDK_servers]
+AzulinhoJavaOpenJdkJDK group=JavaOpenJdkJDK_servers deploy_env=vagrant
+
+[vagrant:children]
+JavaOpenJdkJDK_servers

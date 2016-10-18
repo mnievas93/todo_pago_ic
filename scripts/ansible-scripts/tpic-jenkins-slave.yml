@@ -1,0 +1,13 @@
+---
+- name: Jenkins CI Environment for Slave Servers
+  hosts: jenkins_slave_servers
+  user: user-ci
+  max_fail_percentage: 1
+  sudo: true
+  
+  roles:
+    # Creación de nodos slave: se deja comentado hasta tener otro ambiente remoto
+    # en el cual probarlo
+    #- alban.andrieu.jenkins-slave
+
+

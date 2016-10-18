@@ -1,0 +1,18 @@
+
+192.168.74.14
+
+Path del esb front: /todopago/wso2/front-esb
+
+usuario owner de las dos aplicaciones: usr_ci
+
+grupo owner de las dos aplicaciones: ci
+
+
+192.168.74.15
+
+Path del esb back: /todopago/wso2/back-esb
+Path del dss: /todopago/wso2/dss
+
+usuario owner de las dos aplicaciones: usr_ci
+
+grupo owner de las dos aplicaciones: ci

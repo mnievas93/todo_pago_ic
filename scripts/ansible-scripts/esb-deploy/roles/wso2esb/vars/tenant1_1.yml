@@ -1,0 +1,3 @@
+
+deploy_path: "{{ tenant1_1_deploy_path }}"
+context_suffix: "{{ tenant1_1_context_suffix }}"

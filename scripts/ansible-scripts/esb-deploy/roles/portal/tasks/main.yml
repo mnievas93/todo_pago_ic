@@ -1,0 +1,8 @@
+- name: portal properties
+  template: src=portal.properties dest="{{ jboss_base_path }}/{{ modules_cfg_path }}"
+
+- name: War
+  copy: >
+        src="{{ src_repo_path }}/backend/{{ src_repo_war_dir }}/app.war"
+        dest="{{ jboss_base_path }}/{{ deploy_path }}/"
+        

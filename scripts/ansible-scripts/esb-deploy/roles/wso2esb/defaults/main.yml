@@ -1,0 +1,10 @@
+
+src_repo_base_path: "../"
+src_repo_code_dir: code
+src_repo_esbback_dir: defaultBack
+src_repo_esbfront_dir: defaultFront
+src_repo_dss_dir: dataservices
+deploy_path: "{{ root_tenant_deploy_path }}"
+context_suffix: "{{ root_tenant_context_suffix }}"
+
+src_repo_path: "{{ src_repo_base_path }}/{{ src_repo_code_dir }}"

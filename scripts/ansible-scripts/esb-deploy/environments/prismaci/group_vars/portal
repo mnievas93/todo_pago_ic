@@ -1,0 +1,4 @@
+jboss_base_path: "/todopago/jboss"
+jboss_port_offset: 1
+jboss_user: 'VISA2\usr_ci'
+jboss_java_home: "/opt/java"

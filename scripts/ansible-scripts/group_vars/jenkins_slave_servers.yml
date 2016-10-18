@@ -1,0 +1,9 @@
+jenkins_user: user-ci
+# python -c 'import crypt; print crypt.crypt("This is my Password", "jenkins")'
+# python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"
+#http://docs.ansible.com/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module
+jenkins_password: "Pris1802"
+jenkins_group: jenkins
+jenkins_home: "/var/lib/jenkins"
+jenkins_ssh_authorized_keys_fingerprints:   # Set known authorized keys for ssh
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAgEAq55GCSRPAhLKW6NltbDNKfr94tjcZxTvpP6koN5XKVyTL3+fq6zVpX3JBFxGqqgc05Ryn9+UoL8m9vlKkubdY51kTEUL6do/2EGlCLaHbJKaty8JkOIl+is2FtDkBsdxlaHG060IRESsXdP3Tv820xOFJ1efZfZRGGlz89Bs3D2aEW26HjJFCrjSlpS1ZyHfxFf3ErlSmOn0OAMmv9jmfWheM4mmHnyPVV0aUUIP1JGRIeFG2ntyUd0TNfL9WGEnXruBnpEEHw4oZu77jvKf75RpGTBDjQzhR3IKsY1+/7J1hmIoLc2TRFyUdif1tNX+TNrkg0LJwLSohiMtj8wck3CDdq0r+sOCGtGkT0/950i9sEGR3tz3yHMQXCC7YU0kkkwg2jMpbbTyigRDUKGwzOC2FeXP/PBM5UzgChWTqr2tYIbCRhC86iOEf+PsqNJP6C9tiQhuLG9rdDuexcLUds824NCtID9OWcrnCG+RdV1L44XD8t8+QkK1MR4w8ucXeI5AzhkEvYGucin1SiuVdBNFRfs1IbNd+mOkBnLeF32lEil1fFg75GSFZSXsnMxfnCl1HNvmwlcKIfiwMO3kOtrkVJ9d17mrC8pPgfE5GNE2G6NdYVxCw3JyP9IUflvegNH4a3LsyzP61VRJCOY7fZeb40tl7VTw0KW9R1+NOQ8= nllorente@baufest.com"

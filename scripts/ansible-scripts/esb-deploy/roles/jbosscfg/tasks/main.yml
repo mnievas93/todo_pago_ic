@@ -1,0 +1,20 @@
+- name: ensure modules config dir exists
+  file: >
+      path={{ jboss_base_path }}/{{ modules_cfg_path }}
+      recurse=yes
+      state=directory
+
+- name: jdbc properties
+  template: src=jdbc.properties dest="{{ jboss_base_path }}/{{ modules_cfg_path }}"
+
+- name: ensure jboss config dir exists
+  file: >
+      path={{ jboss_base_path }}/{{ cfg_path }}
+      recurse=yes
+      state=directory
+
+- name: jboss conf
+  template: src=jboss.conf dest="{{ jboss_base_path }}/{{ cfg_path }}"
+
+- name: standalone xml
+  template: src=standalone.xml dest="{{ jboss_base_path }}/{{ standalone_cfg_path }}"

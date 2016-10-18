@@ -1,0 +1,168 @@
+﻿------------Pasos para limpiar los componentes wso2 que estamos distribuyendo -------------
+(Después de realizar estas tareas, se obtienen componentes con menos tamaño, más apropiados para deployar en una VM y para distribuir)
+
+(En realidad lo mejor es bajar la versión del sitio wso2 y correr scripts para que queden los componentes preparados para el ambiente wso2)
+
+(La idea de esto es comparar y obtener la diferencia de los componentes out of the box y estos para separar la configuración y correrlos en un script.)
+
+(las consolas de los componentes son accesibles: Login: usr/pass: admin/admin)
+
+#1- Copia de ambiente (faltaría sumar los procedimientos para obtenerlo desde el descargado del sitio de wso2)
+#2- Borrado de samples
+	dss\samples
+	esb-back\samples
+	esb-front\samples
+
+#3- Borrado de logs.
+	dss\repository\logs
+	esb-back\repository\logs
+
+#4- Borrado de tmp.
+	dss\tmp
+	esb-back\tmp
+	esb-front\tmp
+
+#5-  Borrado de componentes deployados.
+	dss\repository\deployment\server\dataservices
+
+	esb-back\repository\deployment\server\synapse-configs\default\api
+	esb-back\repository\deployment\server\synapse-configs\default\local-entries
+	esb-back\repository\deployment\server\synapse-configs\default\endpoints
+	esb-back\repository\deployment\server\synapse-configs\default\proxy-services
+	esb-back\repository\deployment\server\synapse-configs\default\sequences
+
+	esb-front\repository\deployment\server\synapse-configs\default\api
+	esb-front\repository\deployment\server\synapse-configs\default\endpoints
+	esb-front\repository\deployment\server\synapse-configs\default\local-entries
+	esb-front\repository\deployment\server\synapse-configs\default\proxy-services
+	esb-front\repository\deployment\server\synapse-configs\default\sequences
+
+
+
+
+#6- Backups
+	esb-back\repository\deployment\*.tgz
+	esb-back\repository\deployment\bck.server.20141023
+	esb-back\repository\deployment\server\synapse-configs\default\*.tgz
+
+	esb-front\repository\deployment\*.tgz
+	esb-front\repository\deployment\bck.server.20141023
+
+
+------------------------------------------------------------------------------------------------------------
+Diferencias encontradas en el esb-front con respecto a la versión out of the box the wso2-esb-4.8.1
+
+
+-- Mediadores custom
+
+* esb-front/repository/components/dropins (agregados)
+
+ESBMediators-1.0.0.jar
+HashMediator-1.0.0.jar
+PKCS7SecurityMediator-1.0.0.jar
+RSAMediator-1.0.0.jar
+
+-- Librerías
+
+* esb-front/repository/components/dropins (agregados)
+
+jtds_1.3.1_1.0.0.jar
+
+* esb-front/repository/components/lib (agregado)
+jtds-1.3.1.jar  (TODO: chequear si basta con el agregado del dropin)
+
+
+-- Configuraciones
+
+* esb-front/repository/conf/axis2/axis2.xml (modificaciones)
+* esb-front/repository/conf/datasources/master-datasources.xml (modificaciones)
+* esb-front/repository/conf/carbon.xml (modificaciones)
+* esb-front/repository/conf/log4j.properties (modificaciones)
+
+
+-- Seguridad: Certificados
+
+*esb-front/repository/resources/security
+(agregados)
+botonRSA.priv
+botonRSA.pub
+cert_banelco.crt
+(modificaciones) (chequear)
+client-truststore.jks
+
+
+
+-----------------------------------------------------------------------------------------------------------
+Diferencias encontradas en el esb-back con respecto a la versión out of the box the wso2-esb-4.8.1
+
+-- Mediadores custom
+
+* esb-back/repository/components/dropins (agregados)
+
+Base64Mediator-1.0.0.jar
+ESBMediators-1.0.0.jar
+HashMediator-1.0.0.jar
+PKCS7SecurityMediator-1.0.0.jar
+RSAMediator-1.0.0.jar
+
+-- Librerías
+
+* esb-back/repository/components/dropins (agregados)
+
+jtds_1.3.1_1.0.0.jar
+
+* esb-back/repository/components/lib (agregado)
+jtds-1.3.1.jar  (TODO: chequear si basta con el agregado del dropin)
+
+
+-- Configuraciones
+
+* esb-back/repository/conf/axis2/axis2.xml (modificaciones)
+* esb-back/repository/conf/datasources/master-datasources.xml (modificaciones)
+* esb-back/repository/conf/carbon.xml (modificaciones)
+* esb-back/repository/conf/log4j.properties (modificaciones)
+
+-- Seguridad: Certificados
+
+*esb-back/repository/resources/security
+(agregados)
+botonRSA.priv
+botonRSA.pub
+cert_banelco.crt
+certificadoObtenerFactura.cer
+(modificaciones) (chequear)
+client-truststore.jks
+
+
+-----------------------------------------------------------------------------------------------------------
+Diferencias encontradas en el dss con respecto a la versión out of the box the dss-3.2.1
+
+
+-- Librerías
+* dss/repository/components/dropins (agregados)
+
+jtds_1.3.1_1.0.0.jar
+
+* dss/repository/components/lib (agregado)
+jtds-1.3.1.jar  (TODO: chequear si basta con el agregado del dropin)
+
+
+-- Patches
+(Ver cómo instalar patches que faltan)
+- Estos son los que hay que agregar (conseguir los ids de los patches (Estas son las carpetas))
+* dss/repository/components/patches/patch0000
+* dss/repository/components/patches/patch0008
+* dss/repository/components/patches/patch0009
+
+-- Plugins
+(Aquí hay diferencias, pero se supone que corresponde a la apliación de patches. TODO: Chequear)
+
+--  Configuraciones
+
+* dss/repository/conf/carbon.xml (modificaciones): Offset y RMIRegistryPort
+
+------------
+(No se encontraron diferencias por la configuración de datasources)
+(Esto puede ser un problema porque no se ve la configuración de los data sources que referencian las bases de datos de prisma)
+(TODO: Chequear la configuración de datasources por archivos.)
+-----------------------------------------------------------------------------------------------------------

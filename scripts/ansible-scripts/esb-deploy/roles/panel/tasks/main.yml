@@ -1,0 +1,7 @@
+- name: panel properties
+  template: src=panel_config.properties dest="{{ jboss_base_path }}/{{ cfg_path }}"
+
+- name: War
+  copy: >
+        src="{{ src_repo_path }}/backend/{{ src_repo_war_dir }}/visaApp.war"
+        dest="{{ jboss_base_path }}/{{ deploy_path }}/"

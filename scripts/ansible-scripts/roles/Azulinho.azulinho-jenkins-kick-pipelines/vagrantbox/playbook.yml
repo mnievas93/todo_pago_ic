@@ -1,0 +1,16 @@
+---
+- hosts: vagrant_servers
+  max_fail_percentage: 1
+  serial: 1
+  accelerate: false
+  sudo: true
+
+
+  roles:
+    - Azulinho.azulinho-google-dns
+    - Azulinho.azulinho-python27
+    - Azulinho.azulinho-jenkins-server
+    - Azulinho.azulinho-jenkins-plugins
+    - Azulinho.azulinho-jenkins-reconfigure-jobs-using-jinja2
+    - this-github-role
+

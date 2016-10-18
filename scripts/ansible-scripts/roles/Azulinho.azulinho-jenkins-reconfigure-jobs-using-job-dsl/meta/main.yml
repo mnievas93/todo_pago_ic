@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: Azulinho
+  license: MIT
+  min_ansible_version: 1.6.2
+  platforms:
+    - name: RedHat
+      versions: 6
+  categories:
+    - packaging
+dependencies:
+  - Azulinho.azulinho-python27
+  - Azulinho.azulinho-jenkins-server
+

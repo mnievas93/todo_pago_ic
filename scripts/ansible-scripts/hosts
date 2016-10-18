@@ -1,0 +1,10 @@
+[jenkins_master_servers]
+# TODO: No es recomendable poner la pass así, se podría usar Vault
+# Refs http://docs.ansible.com/ansible/playbooks_vault.html
+212.47.247.56 ansible_sudo_pass='Pris1802'
+
+[jenkins_slave_servers]
+212.47.247.56 ansible_sudo_pass='Pris1802'
+
+[app_servers]
+212.47.247.56 ansible_sudo_pass='Pris1802'

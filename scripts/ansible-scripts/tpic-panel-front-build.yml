@@ -1,0 +1,48 @@
+---
+- name: Panel FrontEnd Build
+  hosts: all
+  vars:
+    base_repo_dir: /home/vagrant/repos
+    github_usr: usr-ci-prisma
+    github_pass: Pris1802
+    installed_apps_dir: /home/vagrant/tpic-apps
+    branch: develop
+    node_exe_path: {{ installed_apps_dir }}/node-v0.12.0-linux-x64/bin
+    node_exe: {{ node_exe_path }}/npm
+    ruby_exe_path: /opt/rh/ruby193/root/usr/bin
+    ruby_libs_path: /opt/rh/ruby193/root/usr/lib64
+    panel_repoid: boton_panel_back
+    panel_dir: {{ base_repo_dir }}/{{ panel_repoid }}
+    panel_front_dir: {{ panel_dir }}/frontend
+    panel_url: "https://{{ github_usr }}:{{ github_pass }}@github.com/TodoPago/{{ panel_repoid }}.git"
+    repoid: {{ panel_repoid }}
+    repo_dir: {{ panel_front_dir }}
+    repo_url: {{ panel_url }}
+  tasks:
+  - name: Panel checked out
+    git: repo={{ repo_url }} dest={{ repo_dir }} version={{ branch }}
+  - name: Grunt npm package installed
+    npm: name=grunt global=yes path={{ repo_dir }} executable={{ node_exe }}
+  - name: Grunt Client npm package installed
+    npm: name=grunt-cli global=yes path={{ repo_dir }} executable={{ node_exe }}
+  - name: Bower npm package installed
+    npm: name=bower global=yes path={{ repo_dir }} executable={{ node_exe }}
+  - name: Npm packages in package.json installed
+    npm: path={{ repo_dir }} executable={{ node_exe }}
+    tags:
+      - always
+    environment:
+        PATH: "{{ ansible_env.PATH }}:{{ node_exe_path }}"
+  - name: Bower Packages based on bower.json installed
+    bower: path={{ repo_dir }}
+    environment:
+        PATH: "{{ ansible_env.PATH }}:{{ node_exe_path }}"
+  - name: Bower packages based on bower.json in their latest version
+    bower: path={{ repo_dir }} state=latest
+    environment:
+        PATH: "{{ ansible_env.PATH }}:{{ node_exe_path }}"
+  - name: Grunt build
+    command: grunt build --force chdir={{ repo_dir }}
+    environment:
+        PATH: "{{ ansible_env.PATH }}:{{ node_exe_path }}:{{ ruby_exe_path }}}"
+        LD_LIBRARY_PATH: {{ ruby_libs_path }}

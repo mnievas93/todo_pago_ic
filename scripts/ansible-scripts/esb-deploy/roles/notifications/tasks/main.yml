@@ -1,0 +1,8 @@
+
+- name: notification properties
+  template: src=notification.properties dest="{{ jboss_base_path }}/{{ modules_cfg_path }}"
+
+- name: War
+  copy: >
+        src="{{ src_repo_path }}//{{ src_repo_war_dir }}/notification.war"
+        dest="{{ jboss_base_path }}/{{ deploy_path }}/"

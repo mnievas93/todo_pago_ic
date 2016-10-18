@@ -1,0 +1,5 @@
+
+- name: install yum-versionlock
+  yum: name=yum-versionlock
+    state=present
+  tags: azulinho-yum-versionlock

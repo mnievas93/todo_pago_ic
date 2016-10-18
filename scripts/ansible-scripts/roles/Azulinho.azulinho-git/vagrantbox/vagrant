@@ -1,0 +1,9 @@
+#
+#	Ansible inventory file for: vagrant
+#
+
+[Git_servers]
+AzulinhoGit group=Git_servers deploy_env=vagrant
+
+[vagrant:children]
+Git_servers

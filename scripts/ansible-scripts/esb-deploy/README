@@ -1,0 +1,8 @@
+
+¿Cómo deployar desde windows?
+
+- Tener en un directorio el repo de integracion-continua y del módulo a deployar  (el path del directorio padre de los dos, el del módulo y el de integracion continua es <local path of repo>).
+- Run ansible in docker:
+
+	docker run -v <local path of repo>:/root/repo -t -i ansible/ubuntu14.04-ansible
+

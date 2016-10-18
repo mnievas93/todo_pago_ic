@@ -1,0 +1,4 @@
+#Deploy subpath for root tenant (common to all wso2 components)
+root_tenant_deploy_path: "repository/deployment/server"
+
+root_tenant_context_suffix: ""

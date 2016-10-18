@@ -1,0 +1,5 @@
+
+wso2_base_path: "/opt/todopago/DEV/wso2/back-esb"
+
+tenant1_1_deploy_path: "repository/deployment/server/synapse-configs/default"
+tenant1_2_deploy_path: "repository/deployment/server/synapse-configs/default"

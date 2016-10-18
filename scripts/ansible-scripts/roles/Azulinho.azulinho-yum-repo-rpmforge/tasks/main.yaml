@@ -1,0 +1,14 @@
+---
+
+- name: Ensure RPMforge GPG key is installed
+  command: rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+    creates=/etc/pki/rpm-gpg/RPM-GPG-KEY-rpmforge-dag
+  tags:
+    - rpmforge_repo
+
+
+- name: install yum rpmforge repo
+  yum: name=http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.i686.rpm
+    state=present
+  tags:
+    - rpmforge_repo

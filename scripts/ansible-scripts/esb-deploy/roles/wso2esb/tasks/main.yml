@@ -1,0 +1,79 @@
+  - debug: msg="play_hosts={{play_hosts}}"
+#    run_once: true
+  - debug: msg="groups={{groups}}"
+#      run_once: true
+  - debug: msg="group names={{group_names}}"
+#      run_once: true
+
+  - name: Include alternative tenant deploy option
+    include_vars: vars/{{ tenant }}.yml
+    when: (( tenant is defined ) and (tenant != 'root_tenant') and (tenant != 'roottenant'))
+
+  - name: Local Entries
+    synchronize: src={{ item }} dest="{{ wso2_base_path }}/{{ deploy_path }}/local-entries" perms=no
+    with_fileglob:
+        - "{{ src_repo_path }}//{{ src_repo_wso2_dir }}/local-entries/*"
+
+  - name: Endpoints
+    template: src={{ item }} dest="{{ wso2_base_path }}/{{ deploy_path }}/endpoints"
+    with_fileglob:
+        - "{{ src_repo_path }}//{{ src_repo_wso2_dir }}/endpoints-templates/*"
+
+  - stat: path="{{ src_repo_path }}//{{ src_repo_wso2_dir }}/message-processors/"
+    register: message_processors
+    delegate_to: 127.0.0.1
+
+  - name: Message-processors
+    synchronize: >
+          src="{{ src_repo_path }}//{{ src_repo_wso2_dir }}/message-processors/"
+          dest="{{ wso2_base_path }}/{{ deploy_path }}/message-processors"
+          perms=no
+          rsync_opts="--verbose"
+    when: message_processors.stat.isdir is defined and message_processors.stat.isdir
+
+  - stat: path="{{ src_repo_path }}//{{ src_repo_wso2_dir }}/message-stores/"
+    register: message_stores
+    delegate_to: 127.0.0.1
+
+  - name: Message-stores
+    synchronize: >
+          src="{{ src_repo_path }}//{{ src_repo_wso2_dir }}/message-stores/"
+          dest="{{ wso2_base_path }}/{{ deploy_path }}/message-stores"
+          perms=no
+          rsync_opts="--verbose"
+    when: message_stores.stat.isdir is defined and message_stores.stat.isdir
+
+
+  - stat: path="{{ src_repo_path }}//{{ src_repo_wso2_dir }}/sequences/"
+    register: sequences
+    delegate_to: 127.0.0.1
+
+  - name: Sequences
+    synchronize: >
+          src="{{ src_repo_path }}//{{ src_repo_wso2_dir }}/sequences/"
+          dest="{{ wso2_base_path }}/{{ deploy_path }}/sequences"
+          perms=no
+          rsync_opts="--verbose"
+    when: sequences.stat.isdir is defined and sequences.stat.isdir
+
+  - stat: path="{{ src_repo_path }}//{{ src_repo_wso2_dir }}/proxy-services/"
+    register: proxy_services
+    delegate_to: 127.0.0.1
+
+  - name: Proxy Services
+    synchronize: >
+          src="{{ src_repo_path }}//{{ src_repo_wso2_dir }}/proxy-services/"
+          dest="{{ wso2_base_path }}/{{ deploy_path }}/proxy-services"
+          perms=no
+          rsync_opts="--verbose"
+    when: proxy_services.stat.isdir is defined and proxy_services.stat.isdir
+
+  - stat: path="{{ src_repo_path }}//{{ src_repo_wso2_dir }}/api"
+    register: api
+    delegate_to: 127.0.0.1
+
+  - name: Apis
+    template: src={{ item }} dest="{{ wso2_base_path }}/{{ deploy_path }}/api"
+    with_fileglob:
+        - "{{ src_repo_path }}//{{ src_repo_wso2_dir }}/api-templates/*"
+    when: api.stat.isdir is defined and api.stat.isdir

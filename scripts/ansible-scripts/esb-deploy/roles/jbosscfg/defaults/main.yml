@@ -1,0 +1,7 @@
+src_repo_path: "../"
+src_repo_war_dir: "target/"
+deploy_path: "standalone/deployments/"
+standalone_cfg_path: "standalone/configuration/"
+modules_cfg_path: "modules/com/visa/boton/main"
+cfg_path: "conf"
+jboss_base_path: "/opt/todopago/jboss"

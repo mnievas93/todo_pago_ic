@@ -1,0 +1,66 @@
+
+portal_host_ep: 192.168.74.13
+portal_port_ep: 8080
+
+notifications_host_ep: 192.168.74.13
+notifications_port_ep: 8080
+
+panel_host_ep: 192.168.74.13
+panel_port_ep: 8080
+
+
+esbfront_host_ep: 192.168.74.14
+esbfront_http_port_ep: 8280
+esbfront_https_port_ep: 8243
+
+esbback_host_ep: 192.168.74.15
+esbback_http_port_ep: 8280
+esbback_https_port_ep: 8243
+
+dss_host_ep: 192.168.74.15
+# Offset 100
+dss_http_port_ep: 9863
+
+
+db_host: 192.168.75.11
+db_port: 1433
+db_usr_configurations: todopago
+db_pass_configurations: "todopago"
+db_usr_transactions: todopago
+db_pass_transactions: "todopago"
+
+# TODO: Por ahora el de qa
+couchbase_host: 172.16.2.107
+couchbase_port: 8092
+
+#TODO: Chequear
+bpservice_host_ep: localhost
+bpservice_port_ep: 10443
+
+decidir_host_ep: 138.121.79.61
+decidir_port_ep: 8443
+
+
+#TODO: Chequear
+sso_host_ep: localhost
+sso_port_ep: 28960
+
+pushnotify_host_ep: 192.168.11.87
+pushnotify_port_ep: 18280
+
+serviciolink_host_ep: 111.111.111.111
+
+dataservice_host_ep: 192.168.74.14
+dataservice_port_ep: 8280
+
+#TODO: Chequear
+obtenerfactura_host_ep: localhost
+obtenerfactura_port_ep: 18080
+
+smtp_host: 192.168.28.45
+smtp_port: 25
+mail_user:
+mail_pass:
+
+jms_host: 192.168.74.13
+jms_port: 5446

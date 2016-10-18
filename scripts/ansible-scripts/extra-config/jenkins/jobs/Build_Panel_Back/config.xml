@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project>
+  <actions/>
+  <description>Ejecución del build de Panel BE</description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>10</daysToKeep>
+        <numToKeep>5</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+    <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.17">
+      <optOut>false</optOut>
+    </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
+      <autoRebuild>false</autoRebuild>
+      <rebuildDisabled>false</rebuildDisabled>
+    </com.sonyericsson.rebuild.RebuildSettings>
+    <hudson.plugins.throttleconcurrents.ThrottleJobProperty plugin="throttle-concurrents@1.8.4">
+      <maxConcurrentPerNode>0</maxConcurrentPerNode>
+      <maxConcurrentTotal>0</maxConcurrentTotal>
+      <throttleEnabled>false</throttleEnabled>
+      <throttleOption>project</throttleOption>
+    </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
+  </properties>
+  <scm class="hudson.plugins.git.GitSCM" plugin="git@2.4.4">
+    <configVersion>2</configVersion>
+    <userRemoteConfigs>
+      <hudson.plugins.git.UserRemoteConfig>
+        <url>https://github.com/TodoPago/boton_portal_back.git</url>
+        <credentialsId>5de81129-6e48-42be-a89f-1b5615a033eb</credentialsId>
+      </hudson.plugins.git.UserRemoteConfig>
+    </userRemoteConfigs>
+    <branches>
+      <hudson.plugins.git.BranchSpec>
+        <name>develop</name>
+      </hudson.plugins.git.BranchSpec>
+    </branches>
+    <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
+    <submoduleCfg class="list"/>
+    <extensions/>
+  </scm>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers>
+    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.18.1">
+      <spec></spec>
+    </com.cloudbees.jenkins.GitHubPushTrigger>
+  </triggers>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/usr/bin/env bash
+
+APP_NAME=TODOPAGO-IC
+
+## Instalacion de Software Necesario ##
+echo -e &quot;\n&quot;$APP_NAME&quot; ***** Instalación de Software Necesario *****\n&quot;
+cd
+
+# Instalación de jdk 7u67-b01 de Oracle (esta es la que tienen actualmente en los servidores de producción)
+if [ -f ./jdk-7u67-linux-x64.rpm ]; then
+  echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; jdk 7u67-b01 de Oracle ya descargada\n&quot;
+else
+  echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Descargando jdk 7u67-b01 de Oracle ...\n&quot;
+  curl -LO -H &quot;Cookie: oraclelicense=accept-securebackup-cookie&quot; \
+  &quot;http://download.oracle.com/otn-pub/java/jdk/7u67-b01/jdk-7u67-linux-x64.rpm&quot;
+fi
+
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Instalando jdk 7u67-b01 de Oracle ...\n&quot;
+sudo rpm -i jdk-7u67-linux-x64.rpm
+
+# Instalación de Maven 3.3.9 (El último al momento)
+if [ -f ./apache-maven-3.3.9-bin.tar.gz ]; then
+  echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Maven 3.3.9 ya descargado \n&quot;
+else
+  echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Descargando Maven 3.3.9 ...\n&quot;
+  wget http://apache.dattatec.com/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+fi
+
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Descomprimiendo Maven ...\n&quot;
+sudo tar xzf apache-maven-3.3.9-bin.tar.gz -C /usr/local
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Agregando link simbolico para Maven ...\n&quot;
+sudo ln -s /usr/local/apache-maven-3.3.9 /usr/local/maven
+
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Configurando variables de entorno para maven ...\n&quot;
+echo &quot;export M2_HOME=/usr/local/maven&quot; &gt;&gt; $HOME/.bash_profile
+echo &quot;export PATH=\${M2_HOME}/bin:\${PATH}&quot; &gt;&gt; $HOME/.bash_profile
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Configurando variables de entorno para maven en sesión actual ...\n&quot;
+export M2_HOME=/usr/local/maven
+export PATH=$M2_HOME/bin:$PATH
+
+# Instalación de paquete de seguridad necesario para maven
+#( Esto es para eliminar el siguiente warning (error) que da maven: &quot;&quot;[WARNING] Failure to transfer org.apache.maven.plugins/maven-metadata.xml from https://repo.maven.apache.org/maven2 was cached in the local repository, resolution will not be reattempted until the update interval of central has elapsed or updates are forced. Original error: Could not transfer metadata org.apache.maven.plugins/maven-metadata.xml from/to central (https://repo.maven.apache.org/maven2): java.security.ProviderException: java.security.KeyException&quot;)
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Instalando nss ... \n&quot;
+sudo yum -y --quiet install nss
+
+# Instalación de node js
+
+if [ -f ./node-v0.12.0-linux-x64.tar.gz ]; then
+  echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Node JS ya descargado \n&quot;
+else
+  echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Descargando node js ...\n&quot;
+  wget https://nodejs.org/download/release/v0.12.0/node-v0.12.0-linux-x64.tar.gz
+fi
+
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Desplegando targz del NodeJs ...\n&quot;
+tar xzf ./node-v0.12.0-linux-x64.tar.gz
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Agregando NodeJs al Path ...\n&quot;
+export PATH=$PATH:$HOME/node-v0.12.0-linux-x64/bin
+echo &quot;export PATH=\$PATH:\$HOME/node-v0.12.0-linux-x64/bin&quot; &gt;&gt; $HOME/.bash_profile
+
+# Instalación de Ruby
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Instalando Ruby: centos-release-SCL ...\n&quot;
+sudo yum -y --quiet install centos-release-SCL
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Instalando Ruby: ruby193 ...\n&quot;
+sudo yum -y --quiet install ruby193
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Instalando Ruby: Habilitando ruby ...\n&quot;
+echo &quot;source /opt/rh/ruby193/enable&quot; | sudo tee -a /etc/profile.d/ruby193.sh
+source /opt/rh/ruby193/enable
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Instalando Ruby: herramientas de desarrollo ...\n&quot;
+sudo yum -y --quiet install ruby193-ruby-devel.x86_64
+# Instalación de Sass
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Instalando Sass ...\n&quot;
+gem install sass
+
+# Instalación de herramientos de compilación para el Frontend del Panel
+# Esto es para tener los headers y la herramienta de compilación que requiere el compass para instalarse
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Instalando Dependencias para el Frontend del Panel ...\n&quot;
+#TODO: ¡¡Hay que chequearlo!!
+# Instalación de gcc
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Instalando gcc ...\n&quot;
+sudo yum -y --quiet install gcc
+#Instalacion de compass
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Instalando Compass ...\n&quot;
+gem install compass
+</command>
+    </hudson.tasks.Shell>
+    <hudson.tasks.Shell>
+      <command>#!/usr/bin/env bash
+
+APP_NAME=TODOPAGO-IC
+BASE_REPO_DIR=$HOME/repos
+GITHUB_USR_PASS=usr-ci-prisma:Pris1802
+BRANCH=develop
+
+echo -e &quot;\n&quot;$APP_NAME&quot; ***** COMPILACIÓN DE BACKEND de PORTAL *****\n&quot;
+
+# Variables Portal
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Seteando variables para acceso a recursos del backend de portal ...\n&quot;
+PORTAL_BACK_REPOID=boton_portal_back
+PORTAL_BACK_DIR=$BASE_REPO_DIR/$PORTAL_BACK_REPOID
+PORTAL_BACK_URL=https://$GITHUB_USR_PASS@github.com/TodoPago/$PORTAL_BACK_REPOID.git
+
+echo &quot;PORTAL_BACK_URL: &quot;$PORTAL_BACK_URL
+echo &quot;PORTAL_BACK_DIR: &quot;$PORTAL_BACK_DIR
+
+## Compilación del Backend del Portal ##
+echo -e &quot;\n&quot;$APP_NAME&quot; ***** Compilación del Backend del Portal *****\n&quot;
+
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Yendo a directorio del backend del Portal ...\n&quot;
+cd $PORTAL_BACK_DIR
+echo -e &quot;\n&quot;$APP_NAME&quot; --&gt; Realizando build del Backend del Portal ...\n&quot;
+mvn clean install -DskipTests
+
+
+echo -e &quot;\n&quot;$APP_NAME&quot; ***** COMPILACIÓN DE BACKEND de PORTAL FINALIZADA *****\n&quot;
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers>
+    <hudson.tasks.Mailer plugin="mailer@1.16">
+      <recipients>nllorente@baufest.com</recipients>
+      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
+      <sendToIndividuals>false</sendToIndividuals>
+    </hudson.tasks.Mailer>
+  </publishers>
+  <buildWrappers/>
+</project>

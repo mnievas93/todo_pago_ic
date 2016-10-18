@@ -1,0 +1,13 @@
+[portal]
+baufestdev_portal ansible_ssh_host='192.168.74.13' ansible_user='VISA2\usr_ci'
+
+[esbback]
+prismaci_back ansible_ssh_host='192.168.74.15' ansible_user='VISA2\usr_ci'
+
+
+[esbfront]
+prismaci_front ansible_ssh_host='192.168.74.14' ansible_user='VISA2\usr_ci' 
+
+
+[dss]
+prismaci_dss ansible_ssh_host='192.168.74.15' ansible_user='VISA2\usr_ci'

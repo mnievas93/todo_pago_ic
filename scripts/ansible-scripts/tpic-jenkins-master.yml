@@ -1,0 +1,64 @@
+---
+- name: Jenkins CI Environment for Master Servers
+  hosts: jenkins_master_servers
+  user: user-ci
+  max_fail_percentage: 1
+  sudo: true
+  
+  roles:
+    # Instala la última versión de Git
+    - Azulinho.azulinho-git
+    # Instala Ansible 1.9 en el equipo
+    - Azulinho.azulinho-ansible
+    # Instala y configura Jenkins master y sus plugins
+    - geerlingguy.jenkins
+
+    # Posiblemente a ser usados cuando empleemos Pipeline as Code:
+    # Instala la herramienta python para generación de jobs
+    #- Azulinho.azulinho-jenkins-job-builder
+    #- Azulinho.azulinho-jenkins-reconfigure-jobs-using-job-builder
+    # Para deploy de jobs usando XML templating de jinja2
+    #- Azulinho.azulinho-jenkins-reconfigure-jobs-using-jinja2
+    # Para deploy de jobs usando groovy DSL
+    #- Azulinho.azulinho-jenkins-reconfigure-jobs-using-job-dsl
+    # Ejecución de los pipelines
+    #- Azulinho.azulinho-jenkins-kick-pipelines
+
+  tasks:
+  # Copiar configuración de Jenkins
+  - name: Copy jenkins config
+    copy: src={{role_dir}}/ansible-scripts/extra-config/jenkins/config.xml dest={{jenkins_install_dir}}/config.xml
+  
+  # Crear usuarios - TODO: convertir en Role
+  - name: Jenkins CI | Check users are provisioned
+    command: test -f {{jenkins_install_dir}}/users/admin/config.xml
+    ignore_errors: yes
+    register: jenkins_users_present
+
+  - name: Jenkins | Create User groovy Script
+    template: src="{{role_dir}}/ansible-scripts/extra-config/jenkins/create-user.groovy.j2" dest="{{jenkins_install_dir}}/create-user.groovy"
+    when: jenkins_users_present|failed
+ 
+  # workaround over X-CLI2-PORT error
+  - wait_for: port=8080 delay=20
+    when: jenkins_users_present|failed
+
+  - name: Jenkins | Create Users
+    shell: "java -jar {{jenkins_jar_location}} -s http://localhost:8080/ groovy {{jenkins_install_dir}}/create-user.groovy {{item.name}} {{item.password}} {{item.email}}"
+    with_items: jenkins_users
+    when: jenkins_users is defined and jenkins_users_present|failed
+    ignore_errors: yes
+
+  - name: Jenkins | Forced restart
+    service: name=jenkins state=restarted
+    when: jenkins_users_present|failed
+
+  # Copiar configuración de pipeline ejemplo 
+  - name: Creates directory
+    file: path={{jenkins_install_dir}}/jobs/Build_Panel_Back state=directory
+    
+  - name: Copy pipeline config
+    copy: src={{role_dir}}/ansible-scripts/extra-config/jenkins/jobs/Build_Panel_Back/config.xml dest={{jenkins_install_dir}}/jobs/Build_Panel_Back/config.xml
+
+
+

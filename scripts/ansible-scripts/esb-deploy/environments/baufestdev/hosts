@@ -1,0 +1,12 @@
+[portal]
+baufestdev_portal ansible_ssh_host='192.168.11.25' ansible_user='jenkins'
+
+[esbback]
+baufestdev_back ansible_ssh_host='192.168.11.87' ansible_user='jenkins'
+#ansible_sudo_pass='administratorbaufest'
+
+[esbfront]
+baufestdev_front ansible_ssh_host='192.168.11.87' ansible_user='jenkins'
+
+[dss]
+baufestdev_dss ansible_ssh_host='192.168.11.87' ansible_user='jenkins'

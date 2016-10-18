@@ -1,0 +1,23 @@
+# Este archivo define todos los roles que se utilizan, de manera de instalarlos
+# en la control machine usando: ansible-galaxy install -r requirements.yml --ignore-errors
+# Por el momento si sincronizamos la carpeta roles de este proyecto
+# desde la control machine y corremos los playbooks desde el directorio raíz (../), 
+# no hace falta instalarlos, los toma de la carpeta.
+
+# TODO: evaluar usar https://github.com/mirskytech/ansible-role-manager
+
+- src: Azulinho.azulinho-git
+# El rol Azulinho.azulinho-ansible está modificado en la carpeta roles
+# del proyecto, cambiando la versión de Ansible a instalar. 
+# TODO: Lo correcto sería bajarlo desde un repo que forkeemos nosotros.
+- src: Azulinho.azulinho-ansible 
+- src: geerlingguy.jenkins
+# A activarse posiblemente cuando usemos Pipeline as Code
+#- src: Azulinho.azulinho-jenkins-job-builder
+#- src: Azulinho.azulinho-jenkins-reconfigure-jobs-using-job-builder
+#- src: Azulinho.azulinho-jenkins-reconfigure-jobs-using-jinja2
+#- src: Azulinho.azulinho-jenkins-reconfigure-jobs-using-job-dsl
+#- src: joshualund.ruby-2_1
+#- src: Azulinho.azulinho-jenkins-kick-pipelines
+#- src: joshualund.ruby-common
+- src: alban.andrieu.jenkins-slave
