@@ -49,7 +49,7 @@ El formato del archivo es el siguiente:
 
 * versión: Es el número de versión del proyecto TodoPago a desplegar (debe corresponderse con un tag de la forma **vx.y** en este repositorio)
 * dependencies: Por cáda uno de los módulos que conforman el proyecto, debe agregarse una entrada en las dependencias bajo la siguiente convención:
-    * Nombre del Módulo: Identificador en formato **CamelCase** de un módulo del proyecto TodoPago. Para los módulos del ESB se utilizará el prefijo **ESB**, por ejemplo ESBDataService o ESBBilleteraCuenta.
+    * Nombre del Módulo: Identificador en formato **CamelCase** de un módulo del proyecto TodoPago. Para los módulos del ESB se utilizará el prefijo **ESB-**, por ejemplo ESB-DataService o ESB-BilleteraCuenta de manera equivalente a los nombres de los JOBs definidos en Jenkins.
     * version_tag: Identificador del tag en el repositorio de código del módulo correspondiente. Debe definir la versión del mismo. **TBD: Explicar convención utiliada para los tags**
 
 ## Forma de trabajo para el desarrollador
