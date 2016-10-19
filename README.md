@@ -24,10 +24,10 @@ El formato del archivo es el siguiente:
 	"TodoPago": {
 		"version": "x.y",
 		"dependencies": {
-			"ESBModuloUno": {
+			"ESB-ModuloUno": {
 				"version_tag": "<identificador del tag>"
 			},
-			"ESBModuloDos": {
+			"ESB-ModuloDos": {
 				"version_tag": "<identificador del tag>"
 			}
 			
