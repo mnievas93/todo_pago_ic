@@ -1,0 +1,19 @@
+{
+	"TodoPago": {
+		"version": "1.1",
+		"dependencies": {
+			"ESB-DataService": {
+				"version_tag": "develop"
+			},
+			"Notificaciones": {
+				"version_tag": "develop"
+			},
+			"Panel": {
+				"version_tag": "develop"
+			},
+			"Portal": {
+				"version_tag": "develop"
+			}
+		}
+	}
+}
